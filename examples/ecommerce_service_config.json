@@ -5,7 +5,7 @@
     "domain": "skincare and beauty products",
     "intro": "Sespringskin offers a range of skincare products focused on natural ingredients and effective results. We provide solutions for various skin types and concerns. Our products are cruelty-free and formulated with care. Explore our collections to find the perfect additions to your skincare regimen. For any questions about products, ingredients, or orders, feel free to ask.",
     "task_docs": [{
-        "source": "https://sespringskin.com//",
+        "source": "https://sespringskin.com/",
         "num": 20
     }],
     "rag_docs": [{

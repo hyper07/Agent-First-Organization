@@ -30,13 +30,19 @@ class NLUModelAPI ():
         dialog_history = [{"role": "system", "content": sys_prompt}]
         kwargs = {'model': model["model_type_or_path"], 'temperature': 0.1}
         
-        if model['llm_provider'] != 'anthropic': kwargs['n'] = 1
+        # set number of chat completions to generate, isn't supported by Anthropic, and assume not for Ollama for now
+        if model['llm_provider'] not in ['anthropic', 'ollama']:
+            kwargs['n'] = 1
         llm = PROVIDER_MAP.get(model['llm_provider'], ChatOpenAI)(**kwargs)
 
         if model['llm_provider'] == 'openai':
             llm = llm.bind(response_format={"type": "json_object"} if response_format == "json" else {"type": "text"})
             res = llm.invoke(dialog_history)
-        else:
+        elif model['llm_provider'] == 'ollama':
+            # Assuming Ollama takes dialog_history directly.
+            # If JSON output is needed and supported via a specific mechanism for NLU, it can be added here.
+            res = llm.invoke(dialog_history)
+        else: # This covers anthropic, gemini, huggingface
             messages = [("user", f"{dialog_history[0]['content']} Only choose the option letter, no explanation.")]
             res = llm.invoke(messages)
         
@@ -152,8 +158,9 @@ class SlotFillModelAPI():
         logger.info(f"Prompt for {note}: {sys_prompt}")
         dialog_history = [{"role": "system", "content": sys_prompt}]
         kwargs = {'model': model["model_type_or_path"], 'temperature': 0.7}
-        # set number of chat completions to generate, isn't supported by Anthropic
-        if model['llm_provider'] != 'anthropic': kwargs['n'] = 1
+        # set number of chat completions to generate, isn't supported by Anthropic, and assume not for Ollama for now
+        if model['llm_provider'] not in ['anthropic', 'ollama']:
+            kwargs['n'] = 1
         llm = PROVIDER_MAP.get(model['llm_provider'], ChatOpenAI)(**kwargs)
 
         if model['llm_provider'] == 'openai':
@@ -172,8 +179,18 @@ class SlotFillModelAPI():
             result = agent.run_sync(dialog_history[0]['content'])
             response = result.data
 
+        elif model['llm_provider'] == 'ollama':
+            # Assuming Ollama can use .bind_tools for structured output, similar to Anthropic
+            messages = [{"role": "user", "content": dialog_history[0]['content']}] # Using simplified message
+            llm = llm.bind_tools([format])
+            res = llm.invoke(messages)
+            if res.tool_calls and len(res.tool_calls) > 0:
+                response = format(**res.tool_calls[0]['args'])
+            else:
+                logger.error(f"Ollama provider ({model.get('model_type_or_path')}) did not return tool_calls for structured output. Raw response content: {res.content}")
+                raise ValueError(f"Ollama provider ({model.get('model_type_or_path')}) failed to produce structured output via tool_calls for schema {format.__name__}.")
         #for claude
-        else:
+        else: # This will now primarily be anthropic, or any other not listed above
             messages = [{"role": "user", "content": dialog_history[0]['content']}]
             llm = llm.bind_tools([format])
             res= llm.invoke(messages)

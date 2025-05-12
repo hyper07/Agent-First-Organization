@@ -4,6 +4,7 @@ import json
 import requests
 from openai import OpenAI
 import anthropic
+import ollama
 from dotenv import load_dotenv
 
 from arklex.utils.model_config import MODEL
@@ -21,14 +22,19 @@ def create_client():
             base_url="https://generativelanguage.googleapis.com/v1beta/openai/" if MODEL['llm_provider'] == 'gemini' else None,
             organization=org_key
         )
+    elif MODEL['llm_provider'] == 'ollama':
+        client = ollama  # Use the ollama Python package directly
     elif MODEL['llm_provider'] == 'anthropic':
         client = anthropic.Anthropic()
     return client
     
 
 def chatgpt_chatbot(messages, client, model=MODEL["model_type_or_path"]):
-   
-    if MODEL['llm_provider'] != 'anthropic':
+    if MODEL['llm_provider'] == 'ollama':
+        # Ollama expects messages as a list of dicts with 'role' and 'content'
+        response = client.chat(model=model, messages=messages)
+        answer = response['message']['content'].strip()
+    elif MODEL['llm_provider'] != 'anthropic':
         answer = client.chat.completions.create(
             model=MODEL['model_type_or_path'], messages=messages, temperature=0.1
         ).choices[0].message.content.strip()

@@ -1,9 +1,9 @@
 [
     {
-        "task_name": "Provide detailed information about Richtech Robotics' products and recommend suitable robots based on customer needs.",
+        "task_name": "Provide detailed information about Sespring skin' products and recommend suitable robots based on customer needs.",
         "steps": [
             "Initiate the conversation by asking the user about their specific needs or requirements regarding robotics solutions.",
-            "Use FaissRAGWorker to retrieve detailed information from the company's internal documentation about Richtech Robotics' products relevant to the user's needs.",
+            "Use FaissRAGWorker to retrieve detailed information from the company's internal documentation about Sespring skin' products relevant to the user's needs.",
             "Present the retrieved product information to the user using MessageWorker, highlighting key features and benefits.",
             "Ask the user if they have any additional preferences or specific requirements to further refine the recommendations.",
             "Based on user feedback, use FaissRAGWorker again if necessary to gather more targeted product information or recommendations.",

@@ -51,19 +51,19 @@
         ]
     ],
     "role": "customer service assistant",
-    "user_objective": "The customer service assistant helps users with customer service inquiries. It can provide information about products, services, and policies, as well as help users resolve issues and complete transactions.",
-    "builder_objective": "The customer service assistant helps to request customer's contact information.",
-    "domain": "robotics and automation",
-    "intro": "Richtech Robotics's headquarter is in Las Vegas; the other office is in Austin. Richtech Robotics provide worker robots (ADAM, ARM, ACE), delivery robots (Matradee, Matradee X, Matradee L, Richie), cleaning robots (DUST-E SX, DUST-E MX) and multipurpose robots (skylark). Their products are intended for business purposes, but not for home purpose; the ADAM robot is available for purchase and rental for multiple purposes. This robot bartender makes tea, coffee and cocktails. Richtech Robotics also operate the world's first robot milk tea shop, ClouTea, in Las Vegas (www.cloutea.com), where all milk tea beverages are prepared by the ADAM robot. The delivery time will be one month for the delivery robot, 2 weeks for standard ADAM, and two months for commercial cleaning robot. ",
+    "user_objective": "The assistant helps users with skincare product inquiries, ingredient information, and order support for SeSpring, a Korean-inspired, vegan, and cruelty-free skincare brand.",
+    "builder_objective": "The assistant helps to provide product recommendations, ingredient details, and support for SeSpring customers.",
+    "domain": "vegan, cruelty-free Korean skincare",
+    "intro": "SeSpring is a Korean-inspired, vegan, and cruelty-free skincare brand that uses light, multifunctional, and clean ingredients to create products that make your skin feel as fresh as springtime. Our products are free of harsh and harmful ingredients, clinically tested for all skin types, and ethically manufactured. SeSpring's line includes moisturizers, cleansers, serums, and more, all designed to hydrate, protect, and renew your skin.",
     "task_docs": [
         {
-            "source": "https://www.richtechrobotics.com/",
+            "source": "https://sespringskin.com/",
             "num": 20
         }
     ],
     "rag_docs": [
         {
-            "source": "https://www.richtechrobotics.com/",
+            "source": "https://sespringskin.com/",
             "num": 20
         }
     ],

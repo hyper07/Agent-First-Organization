@@ -8,8 +8,6 @@ from benchmark.tau_bench.model_utils.model.completion import approx_cost_for_dat
 from benchmark.tau_bench.model_utils.model.general_model import wrap_temperature
 from benchmark.tau_bench.model_utils.model.utils import approx_num_tokens
 
-DEFAULT_OLLAMA_MODEL = "gemma3"
-OLLAMA_API_URL_ENV_VAR = "http://localhost:8434"
 
 # Placeholder: update with actual Ollama pricing if available
 PRICE_PER_INPUT_TOKEN = 0.0
@@ -25,11 +23,11 @@ class OllamaModel(ChatModel):
         temperature: float = 0.0,
     ) -> None:
         if model is None:
-            self.model = DEFAULT_OLLAMA_MODEL
+            self.model = os.getenv("DEFAULT_OLLAMA_MODEL","gemma3")
         else:
             self.model = model
         if api_url is None:
-            api_url = os.getenv(OLLAMA_API_URL_ENV_VAR, "http://localhost:8434")
+            api_url = os.getenv("OLLAMA_API_URL_ENV_VAR", "http://localhost:8434")
         self.api_url = api_url
         self.temperature = temperature
 

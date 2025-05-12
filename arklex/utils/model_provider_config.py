@@ -6,7 +6,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_huggingface import HuggingFaceEndpoint,ChatHuggingFace
-
+import os
 
 def get_huggingface_llm(model, **kwargs):
     llm = HuggingFaceEndpoint(
@@ -17,7 +17,7 @@ def get_huggingface_llm(model, **kwargs):
     return ChatHuggingFace(llm=llm)
 
 def get_ollama_llm(model, **kwargs):
-    return ChatOllama(model=model, base_url="http://127.0.0.1:8434", **kwargs)
+    return ChatOllama(model=model, base_url=os.getenv("OLLAMA_API_URL_ENV_VAR"), **kwargs)
 
 LLM_PROVIDERS = ["openai", "gemini", "anthropic", "huggingface", "ollama"]
 

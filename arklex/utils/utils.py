@@ -101,7 +101,6 @@ def postprocess_json(raw_code):
     valid_phrases = ['"', '{', '}', '[', ']']
 
     valid_lines = []
-    logger.error(f"raw correct result: {raw_code}")
 
     for line in raw_code.split('\n'):
         if len(line) == 0:
@@ -111,7 +110,6 @@ def postprocess_json(raw_code):
         if should_skip:
             continue
 
-        logger.error(f"raw correct result: {raw_code}")
         valid_lines.append(line)
 
     try:

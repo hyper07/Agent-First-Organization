@@ -265,9 +265,23 @@ class Generator:
         final_chain = self.model | StrOutputParser()
         answer = final_chain.invoke(input_prompt)
         logger.debug(f"Generated tasks with thought: {answer}")
-        self.tasks = postprocess_json(answer)
+        try:
+            parsed_tasks = postprocess_json(answer)
+            if parsed_tasks and isinstance(parsed_tasks, list):
+                self.tasks = parsed_tasks
+            else:
+                logger.warning(f"Failed to parse tasks from LLM response: {answer}")
+                self.tasks = []
+        except Exception as e:
+            logger.error(f"Error parsing tasks: {e}, using empty task list")
+            self.tasks = []
 
     def _format_tasks(self):
+        # Ensure tasks is initialized
+        if self.tasks is None:
+            self.tasks = []
+            logger.warning("Tasks were None before formatting, initializing as empty list")
+            
         # TODO: need to use LLM to match the semantics meaning of the tasks
         new_format_tasks = []
         for task_str in self.tasks:
@@ -576,6 +590,10 @@ class Generator:
         # Step 1: Generate the tasks
         if not self.tasks:
             self._generate_tasks()
+            # Ensure tasks is not None after generation
+            if not self.tasks:
+                logger.warning("No tasks were generated. Creating a default task.")
+                self.tasks = [{"task": "Default task", "intent": "Default task"}]
             logger.info(f"Generated tasks: {self.tasks}")
         else:
             self._format_tasks()

@@ -3,7 +3,7 @@ import sys
 import json
 import logging
 from logging.handlers import RotatingFileHandler
-
+import re
 import tiktoken
 import Levenshtein
 
@@ -91,6 +91,8 @@ def postprocess_json(raw_code):
 		should_skip = not any([line.strip().startswith(phrase) for phrase in valid_phrases])
 		if should_skip:
 			continue
+		
+		logger.error(f"raw correct result: {raw_code}")
 		valid_lines.append(line)
 
 	try:

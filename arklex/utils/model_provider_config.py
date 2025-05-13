@@ -17,7 +17,8 @@ def get_huggingface_llm(model, **kwargs):
     return ChatHuggingFace(llm=llm)
 
 def get_ollama_llm(model, **kwargs):
-    return ChatOllama(model=model, base_url=os.getenv("OLLAMA_API_URL_ENV_VAR"), **kwargs)
+    ollama_base_url = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:8434")
+    return ChatOllama(model=model, base_url=ollama_base_url, **kwargs)
 
 LLM_PROVIDERS = ["openai", "gemini", "anthropic", "huggingface", "ollama"]
 

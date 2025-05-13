@@ -27,7 +27,7 @@ class OllamaModel(ChatModel):
         else:
             self.model = model
         if api_url is None:
-            api_url = os.getenv("OLLAMA_API_URL_ENV_VAR", "http://localhost:8434")
+            api_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:8434")
         self.api_url = api_url
         self.temperature = temperature
 

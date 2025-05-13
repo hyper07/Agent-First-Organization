@@ -81,29 +81,52 @@ def str_similarity(string1, string2):
 
 
 def postprocess_json(raw_code):
-	valid_phrases = ['"', '{', '}', '[', ']']
+    # If raw_code starts with "```json", extract the JSON block directly
 
-	valid_lines = []
-	for line in raw_code.split('\n'):
-		if len(line) == 0:
-			continue
-		# If the line not starts with any of the valid phrases, skip it
-		should_skip = not any([line.strip().startswith(phrase) for phrase in valid_phrases])
-		if should_skip:
-			continue
-		
-		logger.error(f"raw correct result: {raw_code}")
-		valid_lines.append(line)
+    raw_code = re.sub(r"<think>.*?</think>", "", raw_code, flags=re.DOTALL)
 
-	try:
-		generated_result = "\n".join(valid_lines)
-		result = json.loads(generated_result)
-	except json.JSONDecodeError as e:
-		logger.error(f"Error decoding generated JSON - {generated_result}")
-		logger.error(f"raw result: {raw_code}")
-		logger.error(f"Error: {e}")
-		result = None
-	return result
+    if raw_code.strip().startswith("```json"):
+        try:
+            # Remove the code block markers
+            json_str = raw_code.strip()[7:]  # remove "```json"
+            if json_str.endswith("```"):
+                json_str = json_str[:-3]
+            result = json.loads(json_str.strip())
+            return result
+        except Exception as e:
+            logger.error(f"Error decoding JSON from code block: {e}")
+            logger.error(f"raw result: {raw_code}")
+            return None
+
+    valid_phrases = ['"', '{', '}', '[', ']']
+
+    valid_lines = []
+    logger.error(f"raw correct result: {raw_code}")
+
+    for line in raw_code.split('\n'):
+        if len(line) == 0:
+            continue
+        # If the line not starts with any of the valid phrases, skip it
+        should_skip = not any([line.strip().startswith(phrase) for phrase in valid_phrases])
+        if should_skip:
+            continue
+
+        logger.error(f"raw correct result: {raw_code}")
+        valid_lines.append(line)
+
+    try:
+        generated_result = "\n".join(valid_lines)
+        # If no valid JSON lines found, return None
+        if not generated_result.strip():
+            logger.error("No valid JSON lines found in the input.")
+            return None
+        result = json.loads(generated_result)
+    except json.JSONDecodeError as e:
+        logger.error(f"Error decoding generated JSON - {generated_result}")
+        logger.error(f"raw result: {raw_code}")
+        logger.error(f"Error: {e}")
+        result = None
+    return result
 
 def truncate_string(text: str, max_length: int=400):
     if len(text) > max_length:

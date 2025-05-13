@@ -149,11 +149,11 @@ Expected Answer Format (Example):
             "next": [
                 {{
                     "task": "Locate user ID in the system using email.",
-                    "next": []
+                    "next": [{{}}]
                 }},
                 {{
                     "task": "Locate user ID in the system using name + zip code.",
-                    "next": []
+                    "next": [{{}}]
                 }}
             ]
         }}
@@ -173,11 +173,11 @@ Expected Answer Format (Example):
                                 "next": [
                                     {{
                                         "task": "If yes, continue with the requested action.",
-                                        "next": []
+                                        "next": [{{}}]
                                     }},
                                     {{
                                         "task": "If not, inform the user and deny the request.",
-                                        "next": []
+                                        "next": [{{}}]
                                     }}
                                 ]
                             }}
@@ -422,19 +422,19 @@ For example:
 Best Practice: 
 {{
     "task": "Retrieve the information about the customer from CRM and Inquire about specific preferences or requirements (e.g., brand, features, price range).",
-    "next": [
+    "next": [{{
         "task": "Provide a curated list of products that match the user's criteria.",
-        "next": [
+        "next": [{{
             "task": "Ask if the user would like to see more options or has any specific preferences.",
-            "next": [
+            "next": [{{
                 "task": "Confirm if the user is ready to proceed with a purchase or needs more help.",
-                "next": [
+                "next": [{{
                     "task": "Persuade the user to sign up for the Prime membership.",
-                    next: []
-                ]
-            ]
-        ]
-    ]
+                    next: [{{}}]
+                }}]
+            }}]
+        }}]
+    }}]
 }}
 Resources:
 {{
@@ -449,27 +449,27 @@ Answer:
     "task": "Retrieve the information about the customer from CRM and Inquire about specific preferences or requirements (e.g., brand, features, price range).",
     "resource": "UserProfileWorker",
     "example_response": "Do you have some specific preferences or requirements for the product you are looking for?",
-    "next": [
+    "next": [{{
         "task": "Provide a curated list of products that match the user's criteria.",
         "resource": "ProductWorker",
         "example_response": "",
-        "next": [
+        "next": [{{
             "task": "Ask if the user would like to see more options or has any specific preferences.",
             "resource": "MessageWorker",
             "example_response": "Would you like to see more options or do you have any specific preferences?",
-            "next": [
+            "next": [{{
                 "task": "Confirm if the user is ready to proceed with a purchase or needs more help.",
                 "resource": "MessageWorker",
                 "example_response": "Are you ready to proceed with the purchase or do you need more help?",
-                "next": [
+                "next": [{{
                     "task": "Persuade the user to sign up for the Prime membership.",
                     "resource": "MessageWorker",
                     "example_response": "I noticed that you are a frequent shopper. Have you considered signing up for our Prime membership to enjoy exclusive benefits and discounts?",
-                    next: []
-                ]
-            ]
-        ]
-    ]
+                    next: [{{}}]
+                }}]
+            }}]
+        }}]
+    }}]
 }}
 ```
 Best Practice: {best_practice}
